@@ -18,7 +18,7 @@ function DashboardPage() {
   const [requests, setRequests] = useState([]);
   const [statusFilter, setStatusFilter] = useState('all');
   
-  // 🟢 B2.1: State สำหรับข้อความค้นหา
+  // B2.1: State สำหรับข้อความค้นหา
   const [searchTerm, setSearchTerm] = useState('');
   
   const [errorMessage, setErrorMessage] = useState('');
@@ -46,45 +46,50 @@ function DashboardPage() {
     return () => { ignore = true; };
   }, [scenario, reloadKey]);
 
-  // ✅ คำนวณ summary เพื่อส่งให้ SummaryPanel (แก้ ReferenceError และ บั๊ก 2)
+  // คำนวณ summary เพื่อส่งให้ SummaryPanel
   const summary = useMemo(() => {
     return {
       total: requests.length,
       pending: requests.filter((r) => r.status === 'pending').length,
       'in-progress': requests.filter((r) => r.status === 'in-progress').length,
-      completed: requests.filter((r) => r.status === 'completed').length, // 🟢 ใช้ 'completed' เพื่อแก้บั๊ก 2
+      completed: requests.filter((r) => r.status === 'completed').length,
     };
   }, [requests]);
 
-  // ✅ แก้ไข บั๊ก 3 & บั๊ก 6: รวม filteredRequests เป็นตัวเดียว และกรองตาม statusFilter ให้ถูกต้อง
-  // 🟢 B2.2: กรองข้อมูลตามประเภท (requestType) หรือสถานที่ (location)
-  // 🟢 B2.3: กรองแบบทำงานร่วมกันทั้งตัวกรองสถานะ (statusFilter) และคำค้นหา (searchTerm)
+  // B2.2 & B2.3: กรองคำร้องตามสถานะและคำค้นหา
   const filteredRequests = useMemo(() => {
     return requests.filter((req) => {
-      // 1. เช็คสถานะ
       const matchesStatus = statusFilter === 'all' || req.status === statusFilter;
 
-      // 2. เช็คคำค้นหา (ประเภท หรือ สถานที่)
       const term = searchTerm.toLowerCase().trim();
       const matchesSearch =
         (req.requestType ?? '').toLowerCase().includes(term) ||
         (req.location ?? '').toLowerCase().includes(term);
 
-      // ต้องตรงทั้งสองเงื่อนไข (ทำงานซ้อนกัน)
       return matchesStatus && matchesSearch;
     });
   }, [requests, statusFilter, searchTerm]);
+
+  // 🟢 B3.2: เพิ่ม Handler สำหรับรับเรื่องเปลี่ยนสถานะเป็น in-progress
+  async function handleAcknowledge(requestId) {
+    try {
+      const nextRequests = updateRequestStatus(requestId, 'in-progress');
+      setRequests(nextRequests); // อัปเดต state หลักเพื่อ re-render และบันทึกลง persistent storage
+      setNotice(`รับเรื่องคำร้อง ${requestId} แล้ว`);
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : 'รับเรื่องไม่สำเร็จ');
+    }
+  }
 
   function handleRetry() {
     if (scenario) setSearchParams({});
     else reload();
   }
 
-  // ✅ แก้ไข บั๊ก 5: เรียก deleteRequest และ setRequests อัปเดต state หลักทันที
   async function handleDelete(requestId) {
     try {
       const nextRequests = deleteRequest(requestId);
-      setRequests(nextRequests); // 🟢 อัปเดต state หลัก ทำให้แผงสรุปลดจำนวนลงทันที
+      setRequests(nextRequests);
       setNotice(`ลบคำร้อง ${requestId} แล้ว`);
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'ลบคำร้องไม่สำเร็จ');
@@ -95,8 +100,8 @@ function DashboardPage() {
     if (!window.confirm('ต้องการคืนข้อมูลตัวอย่างเริ่มต้นหรือไม่?')) return;
     try {
       setRequests(await resetRequests());
-      setStatusFilter('all');ฟฟ
-      setSearchTerm(''); // 🟢 แก้ไขเป็น setSearchTerm ให้ตรงกับ state ที่ประกาศ
+      setStatusFilter('all');
+      setSearchTerm('');
       setNotice('คืนข้อมูลตัวอย่างเริ่มต้นแล้ว');
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'คืนข้อมูลไม่สำเร็จ');
@@ -126,21 +131,27 @@ function DashboardPage() {
               <h2 id="request-list-title">รายการคำร้อง</h2>
               <FilterBar value={statusFilter} onFilterChange={setStatusFilter} />
             </div>
-            {/* 🟢 B2.1: วางช่อง <input> ค้นหา ตรงนี้ */}
+
+            {/* B2.1: ช่องรับ Input ค้นหา */}
             <input
               type="text"
               placeholder="ค้นหาจากประเภทหรือสถานที่"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            {/* 🟢 B2.4: ถ้าค้นหาไม่พบให้แสดงข้อความ ไม่พบคำร้องที่ตรงกับการค้นหา */}
+
+            {/* B2.4 & B3.2: แสดงรายการการ์ด พร้อมส่ง prop onAcknowledge={handleAcknowledge} */}
             {filteredRequests.length === 0 ? (
               <p className="empty-message" style={{ padding: '1rem 0', color: '#666' }}>
                 ไม่พบคำร้องที่ตรงกับการค้นหา
               </p>
             ) : (
-            {/* TODO B3: ส่ง onAcknowledge={handleAcknowledge} ให้ RequestList */}
-            <RequestList requests={filteredRequests} onDeleteRequest={handleDelete} />
+              <RequestList
+                requests={filteredRequests}
+                onDeleteRequest={handleDelete}
+                onAcknowledge={handleAcknowledge} // 🟢 B3.2: ส่งฟังก์ชัน handleAcknowledge ให้ RequestList
+              />
+            )}
           </section>
         </>
       )}

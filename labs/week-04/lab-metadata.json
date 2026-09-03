@@ -1,0 +1,12 @@
+{
+  "week": "week-04",
+  "title": "React Campus Service Request",
+  "status": "submitted",
+  "sourceOrigin": "monorepo-folder",
+  "originalRepoUrl": "https://github.com/ShinosakiTanaka/engse203-student-labs-68543210003-8",
+  "originalCommit": "feat(week-04): complete react campus service requests",
+  "pullRequestUrl": "https://github.com/ShinosakiTanaka/engse203-student-labs-68543210003-8/pull/3",
+  "submissionTag": "lab-04-submission-v1",
+  "testStatus": "pass",
+  "notes": "React/Vite build output อยู่ใน publish/ พร้อมส่ง"
+}

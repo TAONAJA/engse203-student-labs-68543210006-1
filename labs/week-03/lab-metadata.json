@@ -1,0 +1,12 @@
+{
+  "week": "week-03",
+  "title": "Responsive Web UI & Form Interaction",
+  "status": "submitted",
+  "sourceOrigin": "monorepo-folder",
+  "originalRepoUrl": "https://github.com/ShinosakiTanaka/engse203-student-labs-68543210003-8",
+  "originalCommit": "485b0b5123456789012345678901234567890123",
+  "pullRequestUrl": "https://github.com/ShinosakiTanaka/engse203-student-labs-68543210003-8/pull/2",
+  "submissionTag": "lab-03-submission-v1",
+  "testStatus": "pass",
+  "notes": "Static site ต้องมี index.html ที่ publish root"
+}

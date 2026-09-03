@@ -57,12 +57,18 @@ function DashboardPage() {
   }, [requests]);
 
   // ✅ แก้ไข บั๊ก 3 & บั๊ก 6: รวม filteredRequests เป็นตัวเดียว และกรองตาม statusFilter ให้ถูกต้อง
+  // 🟢 B2.2: กรองข้อมูลตามประเภท (requestType) หรือสถานที่ (location)
   const filteredRequests = useMemo(() => {
     return requests.filter((req) => {
-      if (statusFilter === 'all') return true;
-      return req.status === statusFilter;
+      // เช็คคำค้นหา (ประเภท หรือ สถานที่)
+      const term = searchTerm.toLowerCase().trim();
+      const matchesSearch =
+        (req.requestType ?? '').toLowerCase().includes(term) ||
+        (req.location ?? '').toLowerCase().includes(term);
+
+      return matchesSearch;
     });
-  }, [requests, statusFilter]);
+  }, [requests, searchTerm]);
 
   function handleRetry() {
     if (scenario) setSearchParams({});

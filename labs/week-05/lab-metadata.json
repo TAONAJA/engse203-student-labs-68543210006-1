@@ -1,0 +1,12 @@
+{
+  "week": "week-05",
+  "title": "Campus Service Request Management",
+  "status": "submitted",
+  "sourceOrigin": "migrated-repository",
+  "originalRepoUrl": "https://github.com/ShinosakiTanaka/engse203-student-labs-68543210003-8.git",
+  "originalCommit": "abc12345",
+  "pullRequestUrl": "https://github.com/ShinosakiTanaka/engse203-student-labs-68543210003-8/pull/5",
+  "submissionTag": "lab-05-submission-v1",
+  "testStatus": "pass",
+  "notes": "พัฒนาระบบจัดการคำร้องแจ้งซ่อมและบริการพื้นที่ส่วนกลางด้วย"
+}

@@ -6,6 +6,7 @@ import useManualReload from '../hooks/useManualReload.js';
 import { getRequestById } from '../services/requestService.js';
 
 function RequestDetailPage() {
+  // ✅ โค้ดที่แก้ไขแล้ว
   const { requestId } = useParams();
   const [loadState, setLoadState] = useState('loading');
   const [request, setRequest] = useState(null);
@@ -25,7 +26,9 @@ function RequestDetailPage() {
       setLoadState('error');
     });
     return () => { ignore = true; };
-  }, []);
+    const data = getRequestById(requestId);
+      setRequest(data);
+}, [requestId]); // 🟢 เพิ่ม requestId เป็น dependency
 
   return (
     <section data-testid="page-request-detail">

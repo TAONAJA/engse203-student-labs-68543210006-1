@@ -17,7 +17,10 @@ function DashboardPage() {
   const [loadState, setLoadState] = useState('idle');
   const [requests, setRequests] = useState([]);
   const [statusFilter, setStatusFilter] = useState('all');
-  // TODO B2: เพิ่ม state สำหรับข้อความค้นหา ที่นี่
+  
+  // TODO B2: เพิ่ม state สำหรับข้อความค้นหา ที่นี่ (สร้างรอไว้สำหรับ B2)
+  const [searchTerm, setSearchTerm] = useState(''); 
+  
   const [errorMessage, setErrorMessage] = useState('');
   const [notice, setNotice] = useState('');
 
@@ -43,39 +46,46 @@ function DashboardPage() {
     return () => { ignore = true; };
   }, [scenario, reloadKey]);
 
-  const summary = useMemo(() => ({
-    total: requests.length,
-    pending: requests.filter((request) => request.status === 'pending').length,
-    inProgress: requests.filter((request) => request.status === 'in-progress').length,
-    completed: requests.filter((request) => request.status === 'in-progress').length,
-  }), []);
+  // ✅ คำนวณ summary เพื่อส่งให้ SummaryPanel (แก้ ReferenceError และ บั๊ก 2)
+  const summary = useMemo(() => {
+    return {
+      total: requests.length,
+      pending: requests.filter((r) => r.status === 'pending').length,
+      'in-progress': requests.filter((r) => r.status === 'in-progress').length,
+      completed: requests.filter((r) => r.status === 'completed').length, // 🟢 ใช้ 'completed' เพื่อแก้บั๊ก 2
+    };
+  }, [requests]);
 
-  const filteredRequests = statusFilter === 'all'
-    ? requests
-    : requests.filter((request) => request.status === 'pending');
+  // ✅ แก้ไข บั๊ก 3 & บั๊ก 6: รวม filteredRequests เป็นตัวเดียว และกรองตาม statusFilter ให้ถูกต้อง
+  const filteredRequests = useMemo(() => {
+    return requests.filter((req) => {
+      if (statusFilter === 'all') return true;
+      return req.status === statusFilter;
+    });
+  }, [requests, statusFilter]);
 
   function handleRetry() {
     if (scenario) setSearchParams({});
     else reload();
   }
 
+  // ✅ แก้ไข บั๊ก 5: เรียก deleteRequest และ setRequests อัปเดต state หลักทันที
   async function handleDelete(requestId) {
     try {
       const nextRequests = deleteRequest(requestId);
-      setRequests(nextRequests);
+      setRequests(nextRequests); // 🟢 อัปเดต state หลัก ทำให้แผงสรุปลดจำนวนลงทันที
       setNotice(`ลบคำร้อง ${requestId} แล้ว`);
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'ลบคำร้องไม่สำเร็จ');
     }
   }
 
-
   async function handleReset() {
     if (!window.confirm('ต้องการคืนข้อมูลตัวอย่างเริ่มต้นหรือไม่?')) return;
     try {
       setRequests(await resetRequests());
       setStatusFilter('all');
-      setSearchText('');
+      setSearchTerm(''); // 🟢 แก้ไขเป็น setSearchTerm ให้ตรงกับ state ที่ประกาศ
       setNotice('คืนข้อมูลตัวอย่างเริ่มต้นแล้ว');
     } catch (error) {
       setNotice(error instanceof Error ? error.message : 'คืนข้อมูลไม่สำเร็จ');
@@ -105,8 +115,8 @@ function DashboardPage() {
               <h2 id="request-list-title">รายการคำร้อง</h2>
               <FilterBar value={statusFilter} onFilterChange={setStatusFilter} />
             </div>
-            {/* TODO B2: วางช่อง <input> ค้นหา ตรงนี้ (เหนือรายการ) แล้วกรองร่วมกับตัวกรองสถานะ ค้นจากประเภท/สถานที่ */}
-            {/* TODO B3: ส่ง onAcknowledge={handleAcknowledge} ให้ RequestList เพื่อให้การ์ด pending มีปุ่ม "รับเรื่อง" */}
+            {/* TODO B2: วางช่อง <input> ค้นหา ตรงนี้ */}
+            {/* TODO B3: ส่ง onAcknowledge={handleAcknowledge} ให้ RequestList */}
             <RequestList requests={filteredRequests} onDeleteRequest={handleDelete} />
           </section>
         </>

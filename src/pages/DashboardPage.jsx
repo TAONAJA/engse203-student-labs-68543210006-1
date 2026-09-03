@@ -18,8 +18,8 @@ function DashboardPage() {
   const [requests, setRequests] = useState([]);
   const [statusFilter, setStatusFilter] = useState('all');
   
-  // TODO B2: เพิ่ม state สำหรับข้อความค้นหา ที่นี่ (สร้างรอไว้สำหรับ B2)
-  const [searchTerm, setSearchTerm] = useState(''); 
+  // 🟢 B2.1: State สำหรับข้อความค้นหา
+  const [searchTerm, setSearchTerm] = useState('');
   
   const [errorMessage, setErrorMessage] = useState('');
   const [notice, setNotice] = useState('');
@@ -115,7 +115,13 @@ function DashboardPage() {
               <h2 id="request-list-title">รายการคำร้อง</h2>
               <FilterBar value={statusFilter} onFilterChange={setStatusFilter} />
             </div>
-            {/* TODO B2: วางช่อง <input> ค้นหา ตรงนี้ */}
+            {/* 🟢 B2.1: วางช่อง <input> ค้นหา ตรงนี้ */}
+            <input
+              type="text"
+              placeholder="ค้นหาจากประเภทหรือสถานที่"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
             {/* TODO B3: ส่ง onAcknowledge={handleAcknowledge} ให้ RequestList */}
             <RequestList requests={filteredRequests} onDeleteRequest={handleDelete} />
           </section>

@@ -133,6 +133,12 @@ function DashboardPage() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
+            {/* 🟢 B2.4: ถ้าค้นหาไม่พบให้แสดงข้อความ ไม่พบคำร้องที่ตรงกับการค้นหา */}
+            {filteredRequests.length === 0 ? (
+              <p className="empty-message" style={{ padding: '1rem 0', color: '#666' }}>
+                ไม่พบคำร้องที่ตรงกับการค้นหา
+              </p>
+            ) : (
             {/* TODO B3: ส่ง onAcknowledge={handleAcknowledge} ให้ RequestList */}
             <RequestList requests={filteredRequests} onDeleteRequest={handleDelete} />
           </section>

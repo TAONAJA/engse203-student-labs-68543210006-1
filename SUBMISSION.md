@@ -2,8 +2,8 @@
 
 > กรอกให้ครบ **ก่อน** commit ครั้งสุดท้าย
 
-**ชื่อ–นามสกุล:**
-**รหัสนักศึกษา:**
+**ญาณวุฒิ ชวนอาจ:**
+**68543210006-1:**
 **Sec:** 2  **ชุดข้อสอบ:** B
 **Branch ที่ส่ง:** `midterm`
 
@@ -21,13 +21,13 @@
 
 ## เช็คลิสต์ (ติ๊ก x ในวงเล็บเมื่อทำเสร็จ)
 
-- [ ] B1 แก้ครบ 6 จุด + `B1_BUGS.md` กรอกครบ
-- [ ] B2 ค้นหาทำงานครบ 4 checkpoint
-- [ ] B3 ปุ่ม "ทำเสร็จ" persist + รอด refresh (F5 แล้วยังอยู่)
+- [x] B1 แก้ครบ 6 จุด + `B1_BUGS.md` กรอกครบ
+- [x] B2 ค้นหาทำงานครบ 4 checkpoint
+- [x] B3 ปุ่ม "ทำเสร็จ" persist + รอด refresh (F5 แล้วยังอยู่)
 - [ ] B4 `PriorityBadge` + ใช้ใน `RequestCard`
 - [ ] `npm run build` ผ่าน
 - [ ] `AI_USAGE.md` กรอกครบ
-- [ ] push branch `midterm` + ติด tag `midterm-submission-v1`
+- [x] push branch `midterm` + ติด tag `midterm-submission-v1`
 
 ---
 

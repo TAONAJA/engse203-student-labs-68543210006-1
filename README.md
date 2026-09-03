@@ -1,59 +1,85 @@
-# ENGSE203 Student LAB Portfolio
+# ENGSE203 สอบกลางภาค — ภาคปฏิบัติ (Part B) · Sec 2 / ชุด B
 
-Repository เดียวสำหรับเก็บผลงาน LAB ตลอดรายวิชา โดยใช้ branch รายสัปดาห์และ GitHub Pages Hub สำหรับตรวจผลลัพธ์
+แอป **Campus Service Request** เดียวกับที่ทำใน LAB
+ทำงานทีละ **checkpoint** และ **commit ทุกครั้งที่ผ่าน checkpoint**
 
-## เลือกเส้นทางเริ่มต้น
+---
 
-- **รุ่นถัดไป/ยังไม่เริ่ม LAB01:** อ่าน [START_HERE_BEFORE_LAB01.md](./START_HERE_BEFORE_LAB01.md)
-- **รุ่นปัจจุบันมี repo LAB01–03 แยกแล้ว:** อ่าน [START_HERE_LAB01_TO_LAB03.md](./START_HERE_LAB01_TO_LAB03.md)
-- **ทุกสัปดาห์:** ใช้ [WEEKLY_LAB_WORKFLOW.md](./WEEKLY_LAB_WORKFLOW.md)
+## 1. เริ่มต้น (ทำครั้งเดียว ~3 นาที)
 
-```bash
-nvm use
-npm install
-npm run setup -- --student-id 6500000000 --name "ชื่อ นามสกุล" --section SEC1 --github github-user --mode new-course
-```
-
-## Repository Contract
-
-| รายการ | รูปแบบ |
-|---|---|
-| Repository | `engse203-student-labs-<student-id>` |
-| Weekly branch | `lab/week-NN` |
-| Source | `labs/week-NN/source/` |
-| Evidence | `labs/week-NN/evidence/` |
-| Publish input | `labs/week-NN/publish/` |
-| Pages output | `docs/labs/week-NN/` |
-| Pages source | `main /docs` |
-| Submission | Pages Hub URL + Weekly Result URL + merged PR URL + submission tag |
-
-## คำสั่งหลัก
+ทำงานใน **repo ของตัวเอง** บน branch ชื่อ `midterm`
 
 ```bash
-npm run import:source -- week-01 /path/to/old-lab01-repository
-npm run import:publish -- week-03 labs/week-03/source
-npm run build:pages
-npm run verify
+cd engse203-student-labs-<รหัสของคุณ>     # repo ของคุณเอง
+git checkout main
+git pull
+git checkout -b midterm                   # สร้าง branch สอบ
 ```
 
-ถ้า build ซ้ำ ใช้ `--replace` ต่อท้ายคำสั่ง `import:publish` หลังตรวจ week และ path แล้ว
-
-ห้ามแก้ไฟล์ใน `docs/` ด้วยมือ เพราะ `npm run build:pages` จะสร้างใหม่จาก config, metadata และโฟลเดอร์ `publish/`
-
-## Pages URL
-
-```text
-https://<github-username>.github.io/engse203-student-labs-<student-id>/
-```
-
-## LAB ที่เตรียมไว้
-
-Template รุ่นนี้มี workspace LAB01–04 และ Pages Hub จะสร้างการ์ดจากทุก `labs/week-NN/` อัตโนมัติ
-
-## เพิ่ม LAB ในอนาคต
+จากนั้นนำโฟลเดอร์ข้อสอบมาวางเป็น `midterm/` ใน repo (อาจารย์แจก zip หรือดาวน์โหลดจากลิงก์ที่ให้)
 
 ```bash
-npm run add:lab -- week-05 "React Routing and Data"
+cd midterm
+npm ci
+npm run dev        # เปิด http://localhost:5173
 ```
 
-จากนั้นใช้ workflow เดิมกับ `lab/week-05` และ `labs/week-05/`
+> ถ้า `npm ci` ไม่ผ่าน ลอง `npm install` · ถ้ายังไม่ได้ **ยกมือเรียกอาจารย์ทันที**
+
+---
+
+## 2. งาน (รวม 40 คะแนน · 180 นาที)
+
+| งาน | คะแนน | สรุป |
+|---|---:|---|
+| B1 Debug | 12 | หา/แก้บั๊ก 6 จุด + กรอก `B1_BUGS.md` |
+| B2 Search | 10 | เพิ่มช่องค้นหาใน Dashboard |
+| B3 Persist | 10 | ปุ่ม "ทำเสร็จ" เปลี่ยนสถานะแล้วรอด refresh |
+| B4 Component | 8 | สร้าง `PriorityBadge` แล้วใช้ใน `RequestCard` |
+
+รายละเอียดเต็มอยู่ใน **`PartB_Exam_TH.pdf`** · วิธีทำ/ส่งงานอยู่ใน **`PartB_StudentGuide_TH.pdf`**
+
+---
+
+## 3. วิธีทำงาน
+
+```
+อ่านโจทย์ → ทำนายผล → แก้ทีละจุด → npm run dev แล้วสังเกต → ตรงตัวอย่าง output → commit
+```
+
+```bash
+git add -A
+git commit -m "B2.2: filter by name/details"
+```
+
+**commit ทุก checkpoint** — ประวัติ commit คือหลักฐานว่าทำเอง
+
+---
+
+## 4. กติกา
+
+- ใช้ AI/เอกสาร/เว็บได้ — แต่ต้อง commit ทุก checkpoint และกรอก `AI_USAGE.md`
+- ทุกคนถูกสัมภาษณ์ (oral) จากโค้ดที่ส่ง — อธิบายไม่ได้ คะแนนถูกทบทวน
+- **ห้ามแก้ไฟล์ในโฟลเดอร์ `services/`** (เขียนว่า "ให้มาแล้ว — ห้ามแก้")
+- ห้ามคุยกับเพื่อน / ส่งไฟล์หากัน
+
+---
+
+## 5. การส่งงาน (ไม่ต้องทำ Pull Request)
+
+```bash
+cd midterm
+npm run build                  # 1) ต้องขึ้น "✓ built" ไม่มี error
+
+# 2) กรอก SUBMISSION.md ให้ครบ (ชื่อ รหัส ผล build เช็คลิสต์)
+
+cd ..
+git add -A
+git commit -m "final: all tasks + build passes"
+git tag midterm-submission-v1  # 3) ติด tag
+git push -u origin midterm --tags
+```
+
+**เสร็จแล้วแจ้งอาจารย์ว่าพร้อม oral** พร้อมบอก URL repo ของคุณ
+
+> ไม่ต้อง merge เข้า main · ไม่ต้องเปิด Pull Request · งานอยู่บน branch `midterm`

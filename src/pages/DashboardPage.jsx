@@ -58,17 +58,22 @@ function DashboardPage() {
 
   // ✅ แก้ไข บั๊ก 3 & บั๊ก 6: รวม filteredRequests เป็นตัวเดียว และกรองตาม statusFilter ให้ถูกต้อง
   // 🟢 B2.2: กรองข้อมูลตามประเภท (requestType) หรือสถานที่ (location)
+  // 🟢 B2.3: กรองแบบทำงานร่วมกันทั้งตัวกรองสถานะ (statusFilter) และคำค้นหา (searchTerm)
   const filteredRequests = useMemo(() => {
     return requests.filter((req) => {
-      // เช็คคำค้นหา (ประเภท หรือ สถานที่)
+      // 1. เช็คสถานะ
+      const matchesStatus = statusFilter === 'all' || req.status === statusFilter;
+
+      // 2. เช็คคำค้นหา (ประเภท หรือ สถานที่)
       const term = searchTerm.toLowerCase().trim();
       const matchesSearch =
         (req.requestType ?? '').toLowerCase().includes(term) ||
         (req.location ?? '').toLowerCase().includes(term);
 
-      return matchesSearch;
+      // ต้องตรงทั้งสองเงื่อนไข (ทำงานซ้อนกัน)
+      return matchesStatus && matchesSearch;
     });
-  }, [requests, searchTerm]);
+  }, [requests, statusFilter, searchTerm]);
 
   function handleRetry() {
     if (scenario) setSearchParams({});

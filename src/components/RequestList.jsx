@@ -1,14 +1,37 @@
 import RequestCard from './RequestCard.jsx';
 
-function RequestList({ requests, onDeleteRequest, onAcknowledge }) {
-  if (requests.length === 0) return <p className="subtle-empty">ไม่มีคำร้องที่ตรงกับตัวกรองนี้</p>;
+function RequestCard({ request, onDeleteRequest, onAcknowledge }) {
   return (
-    <div className="request-list" data-testid="request-list">
-      {requests.map((request) => (
-        <RequestCard key={request.id} request={request} onDeleteRequest={onDeleteRequest} onAcknowledge={onAcknowledge} />
-      ))}
+    <div className="request-card">
+      <div className="card-header">
+        <h3>{request.title}</h3>
+        <span className={`status-badge ${request.status}`}>{request.status}</span>
+      </div>
+      
+      <p>{request.description}</p>
+      
+      <div className="card-actions">
+        {/* 🟢 B3.1: แสดงปุ่มรับเรื่องเฉพาะสถานะ pending */}
+        {request.status === 'pending' && (
+          <button
+            type="button"
+            className="button secondary"
+            onClick={() => onAcknowledge?.(request.id)}
+          >
+            รับเรื่อง
+          </button>
+        )}
+
+        <button
+          type="button"
+          className="button danger"
+          onClick={() => onDeleteRequest(request.id)}
+        >
+          ลบ
+        </button>
+      </div>
     </div>
   );
 }
 
-export default RequestList;
+export default RequestCard;
